@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ForgetPassword;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
@@ -74,47 +77,76 @@ class UserController extends Controller
     // Forgot Password
     public function forgotPassword(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'email' => 'required|email|exists:users,email',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return response()->json($validator->errors(), 400);
-        // }
-
-        $status = Password::sendResetLink($request->only('email'));
-
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json(['message' => 'Password reset link sent successfully.']);
-        } else {
-            return response()->json(['error' => 'Failed to send password reset link.'], 500);
-        }
-    }
-
-    public function resetPassword(Request $request)
-    {
         $validator = Validator::make($request->all(), [
-            'token' => 'required',
-            'email' => 'required|email|exists:users,email',
-            'password' => 'required|min:8|confirmed',
+            'email' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->password = Hash::make($password);
-                $user->save();
-            }
-        );
+        // generate code 6 digits for reset password
+        $code = rand(100000, 999999);
+        DB::table('verify_code')->insert([
+            'code' => $code,
+            'expiration' => time() + 22,
+        ]);
 
-        if ($status === Password::PASSWORD_RESET) {
-            return response()->json(['message' => 'Password has been reset successfully.']);
-        } else {
-            return response()->json(['error' => 'Failed to reset password.'], 500);
+        $data = [
+            'code' => $code,
+        ];
+
+        try {
+            Mail::to($request['email'])->send(new ForgetPassword($data));
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Email sending failed.',
+                'error' =>  $e->getMessage(),
+            ], 200);
+        }
+
+        return response([
+           'message' => 'Password reset code sent successfully.',
+        ], 200);
+    }
+
+    public function CheckResetCode(Request $request)
+    {
+        $code = $request['code'];
+        $verify_code = DB::table('verify_code')->where('code', $code)->get();
+        if(count($verify_code) > 0){
+            return response([
+               'message' => 'Password reset code is valid.',
+            ], 200);
+        }else{
+            return response([
+               'message' => 'Invalid password reset code.',
+            ], 400);
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:8',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = DB::table('users')->where('email', '=', $request->email)->update([
+            'password' => Hash::make($request->password)
+        ]);
+        if($user){
+            return response([
+               'message' => 'Password reset successfully.',
+            ], 200);
+        }else{
+            return response([
+               'message' => 'Failed to reset password.',
+            ], 400);
         }
     }
 

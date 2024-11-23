@@ -58,7 +58,7 @@ class ContactController extends Controller
     /**
      * Update the specified Contact in storage.
      */
-    public function update(ContactRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         $contact = Contact::findOrFail($id);
         $contact->update($request->all());

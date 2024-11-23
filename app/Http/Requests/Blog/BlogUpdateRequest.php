@@ -27,9 +27,8 @@ class BlogUpdateRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'subtitle' => 'required|email',
+            'subtitle' => 'required',
             'content' => 'required',
-            'image' => 'required|image'
         ];
     }
 

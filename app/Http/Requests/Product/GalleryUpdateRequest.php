@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Blog;
+namespace App\Http\Requests\Product;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Auth;
 
-class BlogStoreRequest extends FormRequest
+class GalleryUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,16 +26,15 @@ class BlogStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'subtitle' => 'required',
-            'content' => 'required',
-            'image' => 'required|image'
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Ensure it's an image with a max size of 2MB
+            'product_id' => 'required|integer|exists:products,id', // Must exist in the categories table
         ];
     }
 
-    // display error messages
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
-    }
+     // display error messages
+     protected function failedValidation(Validator $validator)
+     {
+         throw new HttpResponseException(response()->json($validator->errors(), 422));
+     }
+
 }

@@ -85,6 +85,12 @@ class UserController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
+        $email = User::Where('email', $request['email'])->first();
+
+        if (!$email) {
+            return response()->json(['error' => 'Email not found'], 400);
+        }
+
         // generate code 6 digits for reset password
         $code = rand(100000, 999999);
         DB::table('verify_code')->insert([

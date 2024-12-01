@@ -1,10 +1,18 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CustomerAddressController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\ModifierController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentCardController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JwtMiddleware;
@@ -48,6 +56,70 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::post('gallery', [GalleryController::class, 'store']);
     Route::put('gallery/{id}', [GalleryController::class, 'update']);
     Route::delete('gallery/{id}', [GalleryController::class, 'destroy']);
+
+    // Modifiers routes
+    Route::get('modifiers', [ModifierController::class, 'index']);
+    Route::get('modifier/{id}', [ModifierController::class, 'show']);
+    Route::post('modifier', [ModifierController::class, 'store']);
+    Route::put('modifier/{id}', [ModifierController::class, 'update']);
+    Route::delete('modifier/{id}', [ModifierController::class, 'destroy']);
+
+    // Payment Card routes
+    Route::get('payment-cards', [PaymentCardController::class, 'index']);
+    Route::get('payment-card/{id}', [PaymentCardController::class, 'show']);
+    Route::post('payment-card', [PaymentCardController::class, 'store']);
+    Route::put('payment-card/{id}', [PaymentCardController::class, 'update']);
+    Route::delete('payment-card/{id}', [PaymentCardController::class, 'destroy']);
+
+    // Payment routes
+    Route::get('payments', [PaymentController::class, 'index']);
+    Route::get('payment/{id}', [PaymentController::class, 'show']);
+    Route::post('payment', [PaymentController::class, 'store']);
+    Route::put('payment/{id}', [PaymentController::class, 'update']);
+    Route::delete('payment/{id}', [PaymentController::class, 'destroy']);
+
+    // Customers routes
+    Route::get('customers', [CustomerController::class, 'index']);
+    Route::get('customer/{id}', [CustomerController::class, 'show']);
+    Route::post('customer', [CustomerController::class, 'store']);
+    Route::put('customer/{id}', [CustomerController::class, 'update']);
+    Route::delete('customer/{id}', [CustomerController::class, 'destroy']);
+
+    // Customers Address routes
+    Route::get('customer-addresses', [CustomerAddressController::class, 'index']);
+    Route::get('customer-address/{id}', [CustomerAddressController::class, 'show']);
+    Route::post('customer-address', [CustomerAddressController::class, 'store']);
+    Route::put('customer-address/{id}', [CustomerAddressController::class, 'update']);
+    Route::delete('customer-address/{id}', [CustomerAddressController::class, 'destroy']);
+
+    // Cart routes
+    Route::get('carts', [CartController::class, 'index']);
+    Route::get('cart/{id}', [CartController::class, 'show']);
+    Route::post('cart', [CartController::class, 'store']);
+    Route::put('cart/{id}', [CartController::class, 'update']);
+    Route::delete('cart/{id}', [CartController::class, 'destroy']);
+
+    // Order routes
+    Route::get('orders', [OrderController::class, 'index']);
+    Route::get('order/{id}', [OrderController::class, 'show']);
+    Route::post('order', [OrderController::class, 'store']);
+    Route::put('order/{id}', [OrderController::class, 'update']);
+    Route::delete('order/{id}', [OrderController::class, 'destroy']);
+
+    // Review routes
+    Route::get('reviews', [ReviewController::class, 'index']);
+    Route::get('review/{id}', [ReviewController::class, 'show']);
+    Route::post('review', [ReviewController::class, 'store']);
+    Route::put('review/{id}', [ReviewController::class, 'update']);
+    Route::delete('review/{id}', [ReviewController::class, 'destroy']);
+
+    // Wishlist routes
+    Route::get('wishlists', [ReviewController::class, 'index']);
+    Route::get('wishlist/{id}', [ReviewController::class, 'show']);
+    Route::post('wishlist', [ReviewController::class, 'store']);
+    Route::put('wishlist/{id}', [ReviewController::class, 'update']);
+    Route::delete('wishlist/{id}', [ReviewController::class, 'destroy']);
+
 
     // Contact routes
     Route::get('contacts', [ContactController::class, 'index']);

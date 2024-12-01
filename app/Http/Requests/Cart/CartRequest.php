@@ -1,33 +1,35 @@
 <?php
 
-namespace App\Http\Requests\Contact;
+namespace App\Http\Requests\Cart;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Auth;
 
-class ContactRequest extends FormRequest
+class CartRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        $user = Auth::guard('api')->user();
+        return $user ? true : false;
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request. ['customer_id', 'product_id', 'quantity', 'total_price', 'status'];
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'subject' => 'required|string|max:255',
-            'description' => 'required',
+            'customer_id' => 'required|number',
+            'product_id' => 'required|umber',
+            'quantity' => 'required|number',
+            'total_price' => 'required|number',
         ];
     }
 

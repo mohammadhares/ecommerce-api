@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Product\WishListRequest;
 use App\Models\WishList;
 use Illuminate\Http\Request;
 
@@ -21,16 +22,16 @@ class WishlistController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
      * Store a newly created wishlist in storage.
      */
-    public function store(WishList $request)
+    public function store(WishListRequest $request)
     {
         $wishlist = WishList::create($request->all());
-        return response($wishlist, 201);
+        return response()->json($wishlist, 201);
     }
 
     /**
@@ -39,7 +40,7 @@ class WishlistController extends Controller
     public function show(string $id)
     {
         $wishlist = WishList::findOrFail($id);
-        return response($wishlist, 200);
+        return response()->json($wishlist, 200);
     }
 
     /**
@@ -49,6 +50,6 @@ class WishlistController extends Controller
     {
         $wishlist = WishList::findOrFail($id);
         $wishlist->delete();
-        return response('WishList ' . $id . ' deleted successfully.', 200);
+        return response()->json('WishList ' . $id . ' deleted successfully.', 200);
     }
 }

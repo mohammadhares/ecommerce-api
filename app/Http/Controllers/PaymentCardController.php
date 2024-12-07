@@ -29,7 +29,7 @@ class PaymentCardController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -43,7 +43,7 @@ class PaymentCardController extends Controller
         $card->card_owner = $request->card_owner;
         $card->expire_date = $request->expire_date;
         $card->save();
-        return response($card, 201);
+        return response()->json($card, 201);
     }
 
     /**
@@ -52,7 +52,7 @@ class PaymentCardController extends Controller
     public function show(string $id)
     {
         $card = PaymentCard::findOrFail($id);
-        return response($card, 200);
+        return response()->json($card, 200);
     }
 
     /**
@@ -60,9 +60,9 @@ class PaymentCardController extends Controller
      */
     public function update(PaymendCardRequest $request, string $id)
     {
-        $card = PaymendCardRequest::findOrFail($id);
+        $card = PaymentCard::findOrFail($id);
         $card->update($request->all());
-        return response($card, 200);
+        return response()->json($card, 200);
     }
 
     /**
@@ -70,8 +70,8 @@ class PaymentCardController extends Controller
      */
     public function destroy(string $id)
     {
-        $card = PaymendCardRequest::findOrFail($id);
+        $card = PaymentCard::findOrFail($id);
         $card->delete();
-        return response('payment card ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('payment card ' . $id . ' deleted sucessfully.', 200);
     }
 }

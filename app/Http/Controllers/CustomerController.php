@@ -30,7 +30,7 @@ class CustomerController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -49,7 +49,7 @@ class CustomerController extends Controller
         $customer->phone = $request->phone;
         $customer->image = $name;
         $customer->save();
-        return response($customer, 201);
+        return response()->json($customer, 201);
     }
 
     /**
@@ -58,7 +58,7 @@ class CustomerController extends Controller
     public function show(string $id)
     {
         $customer = Customer::findOrFail($id);
-        return response($customer, 200);
+        return response()->json($customer, 200);
     }
 
     /**
@@ -75,14 +75,13 @@ class CustomerController extends Controller
             $name = $customer->image;
         }
 
-        $customer->product_id = $request->category_id;
         $customer->name = $request->name;
-        $customer->description = $request->description;
-        $customer->price = $request->price;
-        $customer->type = $request->type;
+        $customer->bio = $request->bio;
+        $customer->email = $request->email;
+        $customer->phone = $request->phone;
         $customer->image = $name;
         $customer->save();
-        return response($customer, 200);
+        return response()->json($customer, 200);
     }
 
     /**
@@ -92,6 +91,6 @@ class CustomerController extends Controller
     {
         $customer = Customer::findOrFail($id);
         $customer->delete();
-        return response('customer ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('customer ' . $id . ' deleted sucessfully.', 200);
     }
 }

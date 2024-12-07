@@ -29,7 +29,7 @@ class OrderController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -38,7 +38,7 @@ class OrderController extends Controller
     public function store(OrderRequest $request)
     {
         $order = Order::create($request->all());
-        return response($order, 201);
+        return response()->json($order, 201);
     }
 
     /**
@@ -47,7 +47,7 @@ class OrderController extends Controller
     public function show(string $id)
     {
         $order = Order::findOrFail($id);
-        return response($order, 200);
+        return response()->json($order, 200);
     }
 
     /**
@@ -57,7 +57,7 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
         $order->update($request->all());
-        return response($order, 200);
+        return response()->json($order, 200);
     }
 
     /**
@@ -67,6 +67,6 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
         $order->delete();
-        return response('Order ' . $id . ' deleted successfully.', 200);
+        return response()->json('Order ' . $id . ' deleted successfully.', 200);
     }
 }

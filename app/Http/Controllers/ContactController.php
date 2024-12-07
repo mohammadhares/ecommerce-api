@@ -29,7 +29,7 @@ class ContactController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -43,7 +43,7 @@ class ContactController extends Controller
         $contact->subject = $request->subject;
         $contact->description = $request->description;
         $contact->save();
-        return response($contact, 201);
+        return response()->json($contact, 201);
     }
 
     /**
@@ -52,7 +52,7 @@ class ContactController extends Controller
     public function show(string $id)
     {
         $contact = Contact::findOrFail($id);
-        return response($contact, 200);
+        return response()->json($contact, 200);
     }
 
     /**
@@ -62,7 +62,7 @@ class ContactController extends Controller
     {
         $contact = Contact::findOrFail($id);
         $contact->update($request->all());
-        return response($contact, 200);
+        return response()->json($contact, 200);
     }
 
     /**
@@ -72,6 +72,6 @@ class ContactController extends Controller
     {
         $contact = Contact::findOrFail($id);
         $contact->delete();
-        return response('contact ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('contact ' . $id . ' deleted sucessfully.', 200);
     }
 }

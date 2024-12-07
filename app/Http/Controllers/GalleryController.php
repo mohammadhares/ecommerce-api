@@ -21,7 +21,7 @@ class GalleryController extends Controller
         $product_id = $request->input('product_id');
 
         if(!$product_id){
-            return response(['message' => 'Product ID is required'], 400);
+            return response()->json(['message' => 'Product ID is required'], 400);
         }
 
         $query = Gallery::query();
@@ -29,7 +29,7 @@ class GalleryController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -45,7 +45,7 @@ class GalleryController extends Controller
         $gallery->product_id = $request->product_id;
         $gallery->image = $name;
         $gallery->save();
-        return response($gallery, 201);
+        return response()->json($gallery, 201);
     }
 
     /**
@@ -54,7 +54,7 @@ class GalleryController extends Controller
     public function show(string $id)
     {
         $gallery = Gallery::findOrFail($id);
-        return response($gallery, 200);
+        return response()->json($gallery, 200);
     }
 
     /**
@@ -76,7 +76,7 @@ class GalleryController extends Controller
         $gallery->product_id = $request->product_id;
         $gallery->image = $name;
         $gallery->save();
-        return response($gallery, 200);
+        return response()->json($gallery, 200);
     }
 
     /**
@@ -86,6 +86,6 @@ class GalleryController extends Controller
     {
         $gallery = Gallery::findOrFail($id);
         $gallery->delete();
-        return response('gallery ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('gallery ' . $id . ' deleted sucessfully.', 200);
     }
 }

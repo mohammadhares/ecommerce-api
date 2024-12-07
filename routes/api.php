@@ -14,9 +14,9 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WishlistController;
 use App\Http\Middleware\JwtMiddleware;
-
+use Illuminate\Support\Facades\Route;
 Route::prefix('public')->group(function () {
     Route::get('categories', [CategoryController::class, 'index']);
     Route::get('products', [ProductController::class, 'index']);
@@ -31,7 +31,6 @@ Route::prefix('public')->group(function () {
 });
 
 Route::middleware([JwtMiddleware::class])->group(function () {
-
     // User Routes
     Route::get('me', [UserController::class, 'me']);
     Route::post('logout', [UserController::class, 'logout']);
@@ -114,12 +113,11 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::delete('review/{id}', [ReviewController::class, 'destroy']);
 
     // Wishlist routes
-    Route::get('wishlists', [ReviewController::class, 'index']);
-    Route::get('wishlist/{id}', [ReviewController::class, 'show']);
-    Route::post('wishlist', [ReviewController::class, 'store']);
-    Route::put('wishlist/{id}', [ReviewController::class, 'update']);
-    Route::delete('wishlist/{id}', [ReviewController::class, 'destroy']);
-
+    Route::get('wishlists', [WishlistController::class, 'index']);
+    Route::get('wishlist/{id}', [WishlistController::class, 'show']);
+    Route::post('wishlist', [WishlistController::class, 'store']);
+    Route::put('wishlist/{id}', [WishlistController::class, 'update']);
+    Route::delete('wishlist/{id}', [WishlistController::class, 'destroy']);
 
     // Contact routes
     Route::get('contacts', [ContactController::class, 'index']);

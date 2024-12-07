@@ -29,7 +29,7 @@ class CartController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -44,7 +44,7 @@ class CartController extends Controller
         $cart->total_price = $request->total_price;
         $cart->status = 'PENDING';
         $cart->save();
-        return response($cart, 201);
+        return response()->json($cart, 201);
     }
 
     /**
@@ -53,7 +53,7 @@ class CartController extends Controller
     public function show(string $id)
     {
         $cart = Cart::findOrFail($id);
-        return response($cart, 200);
+        return response()->json($cart, 200);
     }
 
     /**
@@ -68,7 +68,7 @@ class CartController extends Controller
         $cart->total_price = $request->total_price;
         $cart->status = 'PENDING';
         $cart->save();
-        return response($cart, 200);
+        return response()->json($cart, 200);
     }
 
     /**
@@ -78,6 +78,6 @@ class CartController extends Controller
     {
         $cart = Cart::findOrFail($id);
         $cart->delete();
-        return response('cart ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('cart ' . $id . ' deleted sucessfully.', 200);
     }
 }

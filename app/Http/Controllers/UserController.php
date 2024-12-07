@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Mail\ForgetPassword;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -23,7 +21,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|',
-            'role' => 'required'
+            'role' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -57,8 +55,8 @@ class UserController extends Controller
         $user = User::where('email', $request['email'])->first();
         if (!$user) {
             return response()->json(['error' => 'Invalid credintial'], 400);
-        }else{
-            if(Hash::check($request['password'], $user->password)){
+        } else {
+            if (Hash::check($request['password'], $user->password)) {
                 $token = JWTAuth::fromUser($user);
                 if (!$token) {
                     return response(['error' => 'Invalid credintial'], 401);
@@ -67,12 +65,11 @@ class UserController extends Controller
                     'user' => $user,
                     'token' => $token,
                 ], 200);
-            }else{
+            } else {
                 return response()->json(['error' => 'Invalid credintial'], 400);
             }
         }
     }
-
 
     // Forgot Password
     public function forgotPassword(Request $request)
@@ -107,12 +104,12 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Email sending failed.',
-                'error' =>  $e->getMessage(),
+                'error' => $e->getMessage(),
             ], 200);
         }
 
         return response([
-           'message' => 'Password reset code sent successfully.',
+            'message' => 'Password reset code sent successfully.',
         ], 200);
     }
 
@@ -120,13 +117,13 @@ class UserController extends Controller
     {
         $code = $request['code'];
         $verify_code = DB::table('verify_code')->where('code', $code)->get();
-        if(count($verify_code) > 0){
+        if (count($verify_code) > 0) {
             return response([
-               'message' => 'Password reset code is valid.',
+                'message' => 'Password reset code is valid.',
             ], 200);
-        }else{
+        } else {
             return response([
-               'message' => 'Invalid password reset code.',
+                'message' => 'Invalid password reset code.',
             ], 400);
         }
     }
@@ -143,15 +140,15 @@ class UserController extends Controller
         }
 
         $user = DB::table('users')->where('email', '=', $request->email)->update([
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
         ]);
-        if($user){
+        if ($user) {
             return response([
-               'message' => 'Password reset successfully.',
+                'message' => 'Password reset successfully.',
             ], 200);
-        }else{
+        } else {
             return response([
-               'message' => 'Failed to reset password.',
+                'message' => 'Failed to reset password.',
             ], 400);
         }
     }
@@ -161,7 +158,6 @@ class UserController extends Controller
     {
         return response()->json(Auth::guard('api')->user());
     }
-
 
     // User logout
     public function logout()

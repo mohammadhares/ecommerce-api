@@ -28,7 +28,7 @@ class ReviewController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -37,7 +37,7 @@ class ReviewController extends Controller
     public function store(ReviewRequest $request)
     {
         $review = Review::create($request->all());
-        return response($review, 201);
+        return response()->json($review, 201);
     }
 
     /**
@@ -46,7 +46,7 @@ class ReviewController extends Controller
     public function show(string $id)
     {
         $review = Review::findOrFail($id);
-        return response($review, 200);
+        return response()->json($review, 200);
     }
 
     /**
@@ -56,7 +56,7 @@ class ReviewController extends Controller
     {
         $review = Review::findOrFail($id);
         $review->update($request->all());
-        return response($review, 200);
+        return response()->json($review, 200);
     }
 
     /**
@@ -66,6 +66,6 @@ class ReviewController extends Controller
     {
         $review = Review::findOrFail($id);
         $review->delete();
-        return response('Review ' . $id . ' deleted successfully.', 200);
+        return response()->json('Review ' . $id . ' deleted successfully.', 200);
     }
 }

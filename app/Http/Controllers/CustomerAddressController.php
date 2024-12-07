@@ -29,7 +29,7 @@ class CustomerAddressController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -45,7 +45,7 @@ class CustomerAddressController extends Controller
         $address->zip_code = $request->zip_code;
         $address->country = $request->country;
         $address->save();
-        return response($address, 201);
+        return response()->json($address, 201);
     }
 
     /**
@@ -54,7 +54,7 @@ class CustomerAddressController extends Controller
     public function show(string $id)
     {
         $address = CustomerAddress::findOrFail($id);
-        return response($address, 200);
+        return response()->json($address, 200);
     }
 
     /**
@@ -70,7 +70,7 @@ class CustomerAddressController extends Controller
         $address->zip_code = $request->zip_code;
         $address->country = $request->country;
         $address->save();
-        return response($address, 200);
+        return response()->json($address, 200);
     }
 
     /**
@@ -80,6 +80,6 @@ class CustomerAddressController extends Controller
     {
         $address = CustomerAddress::findOrFail($id);
         $address->delete();
-        return response('customer address ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('customer address ' . $id . ' deleted sucessfully.', 200);
     }
 }

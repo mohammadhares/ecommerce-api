@@ -27,7 +27,7 @@ class PaymendCardRequest extends FormRequest
     {
         return [
             'company' => 'required|string',
-            'card_number' => 'required|number',
+            'card_number' => 'required',
             'card_owner' => 'required|string',
             'expire_date' => 'required|date_format:Y-m',
         ];

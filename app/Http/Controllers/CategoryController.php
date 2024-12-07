@@ -30,7 +30,7 @@ class CategoryController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -42,7 +42,7 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->description = $request->description;
         $category->save();
-        return response($category, 201);
+        return response()->json($category, 201);
     }
 
     /**
@@ -51,7 +51,7 @@ class CategoryController extends Controller
     public function show(string $id)
     {
         $category = Category::findOrFail($id);
-        return response($category, 200);
+        return response()->json($category, 200);
     }
 
     /**
@@ -61,7 +61,7 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->update($request->all());
-        return response($category, 200);
+        return response()->json($category, 200);
     }
 
     /**
@@ -71,6 +71,6 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->delete();
-        return response('category ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('category ' . $id . ' deleted sucessfully.', 200);
     }
 }

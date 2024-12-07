@@ -30,7 +30,7 @@ class ModifierController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -39,18 +39,18 @@ class ModifierController extends Controller
     public function store(ModifierStoreRequest $request)
     {
         $file = $request->file('image');
-        $name = "uploads/modifier/" . time() . '' . $file->getClientOriginalName();
-        $file->move("uploads/modifier/", $name);
+        $name = "uploads/products/" . time() . '' . $file->getClientOriginalName();
+        $file->move("uploads/products/", $name);
 
         $modifier = new Modifier();
-        $modifier->product_id = $request->category_id;
+        $modifier->product_id = $request->product_id;
         $modifier->name = $request->name;
         $modifier->description = $request->description;
         $modifier->price = $request->price;
         $modifier->type = $request->type;
         $modifier->image = $name;
         $modifier->save();
-        return response($modifier, 201);
+        return response()->json($modifier, 201);
     }
 
     /**
@@ -59,7 +59,7 @@ class ModifierController extends Controller
     public function show(string $id)
     {
         $modifier = Modifier::findOrFail($id);
-        return response($modifier, 200);
+        return response()->json($modifier, 200);
     }
 
     /**
@@ -76,14 +76,14 @@ class ModifierController extends Controller
             $name = $modifier->image;
         }
 
-        $modifier->product_id = $request->category_id;
+        $modifier->product_id = $request->product_id;
         $modifier->name = $request->name;
         $modifier->description = $request->description;
         $modifier->price = $request->price;
         $modifier->type = $request->type;
         $modifier->image = $name;
         $modifier->save();
-        return response($modifier, 200);
+        return response()->json($modifier, 200);
     }
 
     /**
@@ -93,6 +93,6 @@ class ModifierController extends Controller
     {
         $modifier = Modifier::findOrFail($id);
         $modifier->delete();
-        return response('modifier ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('modifier ' . $id . ' deleted sucessfully.', 200);
     }
 }

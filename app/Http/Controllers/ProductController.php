@@ -30,7 +30,7 @@ class ProductController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -52,7 +52,7 @@ class ProductController extends Controller
         $product->is_available = $request->is_available;
         $product->image = $name;
         $product->save();
-        return response($product, 201);
+        return response()->json($product, 201);
     }
 
     /**
@@ -61,7 +61,7 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::findOrFail($id);
-        return response($product, 200);
+        return response()->json($product, 200);
     }
 
     /**
@@ -89,7 +89,7 @@ class ProductController extends Controller
         $product->is_available = $request->is_available;
         $product->image = $name;
         $product->save();
-        return response($product, 200);
+        return response()->json($product, 200);
     }
 
     /**
@@ -99,6 +99,6 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $product->delete();
-        return response('product ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('product ' . $id . ' deleted sucessfully.', 200);
     }
 }

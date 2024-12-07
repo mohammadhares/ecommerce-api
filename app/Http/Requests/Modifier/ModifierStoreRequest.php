@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+
+
 class ModifierStoreRequest extends FormRequest
 {
     /**
@@ -26,10 +28,10 @@ class ModifierStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => 'required|number',
-            'name' => 'required|number',
+            'product_id' => 'required',
+            'name' => 'required',
             'description' => 'required|string',
-            'price' => 'required|number',
+            'price' => 'required',
             'image' => 'required|image',
             'type' => 'required|string',
         ];

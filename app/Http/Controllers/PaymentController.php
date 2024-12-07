@@ -29,7 +29,7 @@ class PaymentController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -46,7 +46,7 @@ class PaymentController extends Controller
         ]);
 
         $payment = Payment::create($validatedData);
-        return response($payment, 201);
+        return response()->json($payment, 201);
     }
 
     /**
@@ -55,7 +55,7 @@ class PaymentController extends Controller
     public function show(string $id)
     {
         $payment = Payment::findOrFail($id);
-        return response($payment, 200);
+        return response()->json($payment, 200);
     }
 
     /**
@@ -74,7 +74,7 @@ class PaymentController extends Controller
         ]);
 
         $payment->update($validatedData);
-        return response($payment, 200);
+        return response()->json($payment, 200);
     }
 
     /**
@@ -84,6 +84,6 @@ class PaymentController extends Controller
     {
         $payment = Payment::findOrFail($id);
         $payment->delete();
-        return response('Payment ' . $id . ' deleted successfully.', 200);
+        return response()->json('Payment ' . $id . ' deleted successfully.', 200);
     }
 }

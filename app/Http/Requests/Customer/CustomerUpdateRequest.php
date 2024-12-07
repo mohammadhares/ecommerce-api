@@ -27,8 +27,8 @@ class CustomerUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'bio' => 'required|text',
-            'email' => 'required|string|email|unique:customers',
+            'bio' => 'required|string',
+            'email' => 'required|string|email',
             'phone' => 'required|string',
         ];
     }

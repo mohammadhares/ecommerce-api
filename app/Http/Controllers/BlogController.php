@@ -30,7 +30,7 @@ class BlogController extends Controller
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
-        return response($result, 200);
+        return response()->json($result, 200);
     }
 
     /**
@@ -48,7 +48,7 @@ class BlogController extends Controller
         $blog->content = $request->content;
         $blog->image = $name;
         $blog->save();
-        return response($blog, 201);
+        return response()->json($blog, 201);
     }
 
     /**
@@ -57,7 +57,7 @@ class BlogController extends Controller
     public function show(string $id)
     {
         $blog = Blog::findOrFail($id);
-        return response($blog, 200);
+        return response()->json($blog, 200);
     }
 
     /**
@@ -81,7 +81,7 @@ class BlogController extends Controller
         $blog->content = $request->content;
         $blog->image = $name;
         $blog->save();
-        return response($blog, 200);
+        return response()->json($blog, 200);
     }
 
     /**
@@ -91,6 +91,6 @@ class BlogController extends Controller
     {
         $blog = Blog::findOrFail($id);
         $blog->delete();
-        return response('blog ' . $id . ' deleted sucessfully.', 200);
+        return response()->json('blog ' . $id . ' deleted sucessfully.', 200);
     }
 }

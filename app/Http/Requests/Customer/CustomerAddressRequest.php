@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Customer;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerAddressRequest extends FormRequest
 {
@@ -11,7 +14,8 @@ class CustomerAddressRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $user = Auth::guard('api')->user();
+        return $user ? true : false;
     }
 
     /**
@@ -22,7 +26,18 @@ class CustomerAddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'customer_id' => 'required|integer',
+            'address_line' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'zip_code' => 'required|string',
+            'country' => 'required|string'
         ];
+    }
+
+    // display error messages
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

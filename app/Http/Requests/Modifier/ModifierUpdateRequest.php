@@ -26,10 +26,10 @@ class ModifierUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => 'required|number',
-            'name' => 'required|number',
+            'product_id' => 'required',
+            'name' => 'required',
             'description' => 'required|string',
-            'price' => 'required|number',
+            'price' => 'required',
             'type' => 'required|string',
         ];
     }

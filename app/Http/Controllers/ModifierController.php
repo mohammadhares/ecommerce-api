@@ -19,8 +19,15 @@ class ModifierController extends Controller
         $order_by = $request->input('order_by', 'id');
         $order_direction = $request->input('order_direction', 'desc');
         $search_query = $request->input('search_query');
+        $product_id = $request->input('product_id');
+
+        if(!$product_id){
+            return response()->json(['message' => 'Product ID is required'], 400);
+        }
 
         $query = Modifier::query();
+        $query->where('product_id', $product_id);
+        $query->with(['product']);
 
         if ($search_query) {
             $query->where('name', 'like', '%' . $search_query . '%')
@@ -58,7 +65,7 @@ class ModifierController extends Controller
      */
     public function show(string $id)
     {
-        $modifier = Modifier::findOrFail($id);
+        $modifier = Modifier::with(['product'])->findOrFail($id);
         return response()->json($modifier, 200);
     }
 

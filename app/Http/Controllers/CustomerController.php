@@ -57,7 +57,13 @@ class CustomerController extends Controller
      */
     public function show(string $id)
     {
-        $customer = Customer::findOrFail($id);
+        $customer = Customer::with([
+            'carts',
+            'addresses',
+            'orders',
+            'review',
+            'wishlist',
+        ])->findOrFail($id);
         return response()->json($customer, 200);
     }
 

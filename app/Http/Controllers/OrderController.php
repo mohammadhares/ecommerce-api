@@ -18,8 +18,20 @@ class OrderController extends Controller
         $order_by = $request->input('order_by', 'id');
         $order_direction = $request->input('order_direction', 'desc');
         $search_query = $request->input('search_query');
+        $customer_id = $request->input('customer_id');
+
+
 
         $query = Order::query();
+        if ($customer_id) {
+            $query->where('customer_id', $customer_id);
+        }
+        $query->with([
+            'customer',
+            'cart',
+            'address',
+            'payments'
+        ]);
 
         if ($search_query) {
             $query->where('status', 'like', '%' . $search_query . '%')
@@ -46,7 +58,12 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with([
+            'customer',
+            'cart',
+            'address',
+            'payments'
+        ])->findOrFail($id);
         return response()->json($order, 200);
     }
 

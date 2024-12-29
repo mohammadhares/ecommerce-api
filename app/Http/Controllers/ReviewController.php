@@ -19,7 +19,19 @@ class ReviewController extends Controller
         $order_direction = $request->input('order_direction', 'desc');
         $search_query = $request->input('search_query');
 
+        $product_id = $request->input('product_id');
+        $customer_id = $request->input('customer_id');
+
+
+
         $query = Review::query();
+        if($product_id){
+            $query->where('product_id', $product_id);
+        }
+        if($customer_id){
+            $query->where('customer_id', $customer_id);
+        }
+        $query->with(['product' , 'customer']);
 
         if ($search_query) {
             $query->where('comment', 'like', '%' . $search_query . '%');
@@ -45,7 +57,7 @@ class ReviewController extends Controller
      */
     public function show(string $id)
     {
-        $review = Review::findOrFail($id);
+        $review = Review::with(['product' , 'customer'])->findOrFail($id);
         return response()->json($review, 200);
     }
 

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-        /**
+    /**
      * Display a listing of the Contacts.
      */
     public function index(Request $request)
@@ -60,7 +60,15 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with([
+            'category', // Parent Category
+            'galleries', // Child Galleries
+            'modifiers', // Child Modifiers
+            'variations', // Child Variations
+            'review', // Child Reviews
+            'wishlist' // Child Wishlist
+        ])->findOrFail($id);
+
         return response()->json($product, 200);
     }
 

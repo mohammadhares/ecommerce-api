@@ -19,7 +19,15 @@ class CustomerAddressController extends Controller
         $order_direction = $request->input('order_direction', 'desc');
         $search_query = $request->input('search_query');
 
+        $customer_id = $request->input('customer_id');
+
+        if (!$customer_id) {
+            return response()->json(['message' => 'Customer ID is required'], 400);
+        }
+
         $query = CustomerAddress::query();
+        $query->where('customer_id', $customer_id);
+        $query->with(['customer']);
 
         if ($search_query) {
             $query->where('email', 'like', '%' . $search_query . '%')
@@ -53,7 +61,7 @@ class CustomerAddressController extends Controller
      */
     public function show(string $id)
     {
-        $address = CustomerAddress::findOrFail($id);
+        $address = CustomerAddress::with(['customer'])->findOrFail($id);
         return response()->json($address, 200);
     }
 

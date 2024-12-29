@@ -18,8 +18,18 @@ class CartController extends Controller
         $order_by = $request->input('order_by', 'id');
         $order_direction = $request->input('order_direction', 'desc');
         $search_query = $request->input('search_query');
+        $customer_id = $request->input('customer_id');
+
+        if (!$customer_id) {
+            return response()->json(['message' => 'Customer ID is required'], 400);
+        }
 
         $query = Cart::query();
+        $query->where('customer_id', $customer_id);
+        $query->with([
+            'customer',
+            'product',
+        ]);
 
         if ($search_query) {
             $query->where('quantity', 'like', '%' . $search_query . '%')
@@ -52,7 +62,10 @@ class CartController extends Controller
      */
     public function show(string $id)
     {
-        $cart = Cart::findOrFail($id);
+        $cart = Cart::with([
+            'customer',
+            'product',
+        ])->findOrFail($id);
         return response()->json($cart, 200);
     }
 

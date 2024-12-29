@@ -18,7 +18,17 @@ class WishlistController extends Controller
         $order_by = $request->input('order_by', 'id');
         $order_direction = $request->input('order_direction', 'desc');
 
+        $product_id = $request->input('product_id');
+        $customer_id = $request->input('customer_id');
+
         $query = WishList::query();
+        if($product_id){
+            $query->where('product_id', $product_id);
+        }
+        if($customer_id){
+            $query->where('customer_id', $customer_id);
+        }
+        $query->with(['product' , 'customer']);
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 

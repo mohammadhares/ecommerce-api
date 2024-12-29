@@ -18,12 +18,22 @@ class PaymentController extends Controller
         $order_by = $request->input('order_by', 'id');
         $order_direction = $request->input('order_direction', 'desc');
         $search_query = $request->input('search_query');
+        $payment_card_id = $request->input('payment_card_id');
+
+        if (!$payment_card_id) {
+            return response()->json(['message' => 'Payment Card ID is required'], 400);
+        }
 
         $query = Payment::query();
+        $query->where('payment_card_id', $payment_card_id);
+        $query->with([
+            'order',
+            'paymentCard'
+        ]);
 
         if ($search_query) {
             $query->where('payment_method', 'like', '%' . $search_query . '%')
-                  ->orWhere('amount', 'like', '%' . $search_query . '%');
+                ->orWhere('amount', 'like', '%' . $search_query . '%');
         }
 
         $query->orderBy($order_by, $order_direction);
@@ -37,15 +47,7 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-        $validatedData = $request->validate([
-            'order_id' => 'required|integer',
-            'payment_card_id' => 'required|integer',
-            'payment_method' => 'required|string|max:50',
-            'amount' => 'required|numeric',
-            'payment_date' => 'required|date',
-        ]);
-
-        $payment = Payment::create($validatedData);
+        $payment = Payment::create($request->all());
         return response()->json($payment, 201);
     }
 
@@ -54,7 +56,10 @@ class PaymentController extends Controller
      */
     public function show(string $id)
     {
-        $payment = Payment::findOrFail($id);
+        $payment = Payment::with([
+            'order',
+            'paymentCard'
+        ])->findOrFail($id);
         return response()->json($payment, 200);
     }
 
@@ -64,16 +69,7 @@ class PaymentController extends Controller
     public function update(PaymentRequest $request, string $id)
     {
         $payment = Payment::findOrFail($id);
-
-        $validatedData = $request->validate([
-            'order_id' => 'sometimes|integer',
-            'payment_card_id' => 'sometimes|integer',
-            'payment_method' => 'sometimes|string|max:50',
-            'amount' => 'sometimes|numeric',
-            'payment_date' => 'sometimes|date',
-        ]);
-
-        $payment->update($validatedData);
+        $payment->update($request->all());
         return response()->json($payment, 200);
     }
 

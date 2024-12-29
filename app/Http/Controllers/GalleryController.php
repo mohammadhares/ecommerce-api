@@ -26,6 +26,8 @@ class GalleryController extends Controller
 
         $query = Gallery::query();
         $query->where('product_id', $product_id);
+        $query->with(['product']);
+
         $query->orderBy($order_by, $order_direction);
         $result = $query->paginate($page_size, ['*'], 'page', $page_num);
 
@@ -53,7 +55,7 @@ class GalleryController extends Controller
      */
     public function show(string $id)
     {
-        $gallery = Gallery::findOrFail($id);
+        $gallery = Gallery::with(['product'])->findOrFail($id);
         return response()->json($gallery, 200);
     }
 
